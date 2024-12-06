@@ -1,0 +1,38 @@
+{
+    "space_time": {
+        "space": {
+            "spatialGranularity": {
+                "spatialGranularity": "Department"
+            },
+            "spatialScope": {
+                "spatialScopeLevel": "Region",
+                "spatialScope": [
+                    75,
+                    76,
+                    44,
+                    84
+                ]
+            }
+        },
+        "time": {
+            "temporalGranularity": {
+                "temporalGranularity": "Year"
+            },
+            "temporalScope": {
+                "temporalScopeLevel": "Year",
+                "temporalScopeStart": "2015",
+                "temporalScopeEnd": "2021"
+            }
+        }
+    },
+    "themes": [
+        {
+            "themeCode": "Environment",
+            "themeDescription": "Opportunities to acquire new information and skills"
+        },
+        {
+            "themeCode": "Physical Health",
+            "themeDescription": "Physical Health"
+        }
+    ]
+}
