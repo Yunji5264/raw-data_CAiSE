@@ -202,7 +202,7 @@ class ColumnClassifierApp:
         self.spatial_counter += 1
 
         # Combine and deduplicate spatial levels
-        available_levels = {level for group in hS_F for _, level in group} - self.used_levels
+        available_levels = {level for group in hS_F for _, level in group}
         spatial_level = self.select_level("Select Spatial Level", sorted(available_levels))
         self.used_levels.add(spatial_level)
 
@@ -221,7 +221,7 @@ class ColumnClassifierApp:
         self.temporal_counter += 1
 
         # Combine and deduplicate temporal levels
-        available_levels = {level for group in hT_F for _, level in group} - self.used_levels
+        available_levels = {level for group in hT_F for _, level in group}
         temporal_level = self.select_level("Select Temporal Level", sorted(available_levels))
         self.used_levels.add(temporal_level)
 
@@ -254,26 +254,46 @@ class ColumnClassifierApp:
         self.column_objects.append(obj)
 
     def select_level(self, title, available_levels):
+        """
+        Display a selection window with a fixed list of levels.
+
+        Parameters:
+            title (str): Title of the selection window.
+            available_levels (list): List of levels to display in the window.
+
+        Returns:
+            str: The selected level.
+        """
+        # Create a new window for level selection
         level_window = tk.Toplevel(self.root)
         level_window.title(title)
 
+        # Create a Listbox and populate it with all available levels
         level_listbox = tk.Listbox(level_window, height=10, width=50)
         for level in available_levels:
             level_listbox.insert(tk.END, level)
         level_listbox.pack(pady=10)
 
+        # Variable to store the selected level
         selected_level = tk.StringVar()
 
+        # Function to confirm the selection
         def confirm_selection():
-            selected = level_listbox.curselection()
-            if selected:
-                selected_level.set(level_listbox.get(selected))
-            level_window.destroy()
+            selected = level_listbox.curselection()  # Get selected index
+            if selected:  # If a selection is made
+                selected_level.set(level_listbox.get(selected))  # Get the value
+            else:
+                selected_level.set("")  # Set to empty string if nothing is selected
+            level_window.destroy()  # Close the window
 
+        # Add Confirm button
         confirm_btn = tk.Button(level_window, text="Confirm", command=confirm_selection)
         confirm_btn.pack(pady=10)
 
+        # Wait for the user to make a selection
         level_window.wait_window()
+
+        # Return the selected level
         return selected_level.get()
 
     def submit(self):

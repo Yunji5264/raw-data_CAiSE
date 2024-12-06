@@ -305,20 +305,20 @@ class Existing_Indicator(Data_Content):
 
 
 class Dataset:
-    def __init__(self, identification, ingestion, space_time, themes, data_content):
+    def __init__(self, identification, ingestion, space_time, theme, data_content):
         """
         Represents a Dataset with identification, ingestion, space-time, themes, and data content.
 
         :param identification: DS_Identification object
         :param ingestion: DS_Ingestion object
         :param space_time: DS_Space_Time object
-        :param themes: List of DS_Theme objects
+        :param theme: DS_Theme object
         :param data_content: List of Data_Content or its subclasses
         """
         self.identification = identification  # DS_Identification object
         self.ingestion = ingestion  # DS_Ingestion object
         self.space_time = space_time  # DS_Space_Time object
-        self.themes = themes  # List[DS_Theme] objects
+        self.theme = theme  # DS_Theme object
         self.data_content = data_content  # List[Data_Content] objects (or its subclasses)
 
     def to_dict(self):
@@ -329,8 +329,8 @@ class Dataset:
             "identification": self.identification.to_dict(),
             "ingestion": self.ingestion.to_dict(),
             "space_time": self.space_time.to_dict(),
-            "themes": [theme.to_dict() for theme in self.themes],
-            "data_content": [content.to_dict() for content in self.data_content],
+            "theme": self.theme.to_dict(),
+            "data_content": [content.to_dict() for content in self.data_content]
         }
 
     @classmethod

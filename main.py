@@ -6,8 +6,26 @@ from info_theme import *
 from uml_class import *
 from store_on_cloud import *
 
+import numpy as np
 
 code_dataset = 0
+
+def convert_numpy_to_native(data):
+    """
+    Recursively convert numpy types (e.g., ndarray, int64) to native Python types.
+    """
+    if isinstance(data, np.ndarray):  # Convert ndarray to list
+        return data.tolist()
+    elif isinstance(data, (np.integer, np.int64)):  # Convert numpy integers to Python int
+        return int(data)
+    elif isinstance(data, (np.floating, np.float64)):  # Convert numpy floats to Python float
+        return float(data)
+    elif isinstance(data, dict):  # Recursively process dictionaries
+        return {key: convert_numpy_to_native(value) for key, value in data.items()}
+    elif isinstance(data, list):  # Recursively process lists
+        return [convert_numpy_to_native(item) for item in data]
+    else:  # Return other types as-is
+        return data
 
 if __name__ == "__main__":
     # Set the data source path
@@ -59,7 +77,7 @@ if __name__ == "__main__":
 
         # Store dataset to the thematic catalogue according to its theme
         if min_common_theme:
-            destination_path = os.path.join(min_common_theme.replace(" ", "_"), os.path.basename(file_path))
+            destination_path = min_common_theme.replace(" ", "_") + '/' + os.path.basename(file_path)
         else:
             destination_path = os.path.join("Uncategorized", os.path.basename(file_path))
 
@@ -74,7 +92,7 @@ if __name__ == "__main__":
             identification=identification,
             ingestion=ingestion,
             space_time=space_time,
-            themes=theme,
+            theme=theme,
             data_content=data_content
         )
         datasets.append(dataset)
@@ -101,13 +119,15 @@ if __name__ == "__main__":
         print(dataset.to_dict())
 
 
-
-
     # Save metadata to the specified metadata file
     metadata_list = [dataset.to_dict() for dataset in datasets]
-    with open(metadata_file, 'w', encoding='utf-8') as meta_file:
-        json.dump(metadata_list, meta_file, ensure_ascii=False, indent=4)
-        print(f"\nMetadata saved to {metadata_file}")
+    metadata_list_converted = [convert_numpy_to_native(metadata) for metadata in metadata_list]
+
+    # 写入 JSON 文件
+    with open(metadata_file, "w", encoding="utf-8") as meta_file:
+        json.dump(metadata_list_converted, meta_file, ensure_ascii=False, indent=4)
+
+    print("Metadata has been saved successfully.")
 
 
 
